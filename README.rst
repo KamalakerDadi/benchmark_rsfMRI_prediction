@@ -24,6 +24,8 @@ like Power.
 
 - ADNI and ADNIDOD (http://adni.loni.usc.edu/)
 
+  - On ADNI datasets: the script ``run_prediction_on_adni.py`` is used. This script starts with timeseries signals extracted on ADNI 136 subjects [9] of (alzheimer's disease 40, mild cognitive impairment 96).
+
 - ACPI (http://fcon_1000.projects.nitrc.org/indi/ACPI/html/acpi_mta_1.html)
 
   - On ACPI datasets: the script ``run_prediction_on_acpi.py`` is used. This script starts with timeseries signals extracted on ACPI preprocessed data. These timeseries are used in the preparation of paper [7] discriminating whether individuals have consumed marijuana or not, of 126 subjects (marijuana consumers 62, non-marijuana consumers 64). Timeseries download link https://osf.io/ab4q6/download
@@ -54,3 +56,5 @@ References
 [7] Dadi, K. et al. 2018. Benchmarking functional connectome-based predictive models for resting-state fMRI. Neuroimage (under review).
     
 [8] Craddock, C., Benhajali, Y., Chu, C., Chouinard, F., Evans, A., Jakab, A., Khundrakpam, B.S., Lewis, J.D., Li, Q., Milham, M., Yan, C., Bellec, P., 2013. The neuro bureau preprocessing initiative: open sharing of preprocessed neuroimaging data and derivatives. Frontiers in Neuroinformatics.
+
+[9] Mueller, S.,  Weiner, M., Thal, L., Petersen, R., Jack, C., Jagust, W., Trojanowski, J.Q., Toga, A.W., Beckett, L., 2005. The alzheimers disease neuroimaging initiative. Neuroimaging Clinics of North America 15, 869.
