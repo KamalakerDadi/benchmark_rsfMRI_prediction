@@ -20,6 +20,8 @@ like Power.
 
 - COBRE (http://cobre.mrn.org/)
 
+  - On COBRE datasets: the script ``run_prediction_on_cobre.py`` is used. This script starts with timeseries signals extracted on COBRE subjects 142 subjects (schizophrenia 65, healthy controls 77). COBRE timeseries can be downloaded from this link   https://osf.io/gyrnx/download
+
 - ADNI and ADNIDOD (http://adni.loni.usc.edu/)
 
 - ACPI (http://fcon_1000.projects.nitrc.org/indi/ACPI/html/acpi_mta_1.html)
