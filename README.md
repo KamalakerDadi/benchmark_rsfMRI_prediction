@@ -1,1 +1,1 @@
-# Minimal-scripts-used-for-paper-Benchmarking-functional-connectome-based-predictive-models-for-rsfMRI
+# Minimal scripts used for paper : Benchmarking models for rsfMRI
