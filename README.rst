@@ -25,6 +25,8 @@ like Power.
 - ADNI and ADNIDOD (http://adni.loni.usc.edu/)
 
   - On ADNI datasets: the script ``run_prediction_on_adni.py`` is used. This script starts with timeseries signals extracted on ADNI 136 subjects [9] of (alzheimer's disease 40, mild cognitive impairment 96). Download link: https://osf.io/xhrcs/download
+  
+  - On ADNIDOD datasets: the script ``run_prediction_on_adnidod.py`` is used. This script starts with timeseries signals extracted on ADNIDOD 167 subjects [9] of (ptsd post traumatic stress disorder 89, normal controls 78). Download link: https://osf.io/5aeny/download
 
 - ACPI (http://fcon_1000.projects.nitrc.org/indi/ACPI/html/acpi_mta_1.html)
 
