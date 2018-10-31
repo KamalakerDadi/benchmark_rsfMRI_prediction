@@ -15,7 +15,7 @@ like Power.
 
 - ABIDE (http://preprocessed-connectomes-project.org/abide/download.html)
 
-  - On ABIDE datasets: the script ``run_prediction_on_abide`` can be used. This script starts with timeseries signals extracted on ABIDE preprocessed data from Preprocessed Connectome Project Initiative (PCP) [8] (http://preprocessed-connectomes-project.org/abide/index.html), 866 subjects (autism 402, normal controls 464). This can be downloaded from https://osf.io/hc4md/download
+  - On ABIDE datasets: the script ``run_prediction_on_abide.py`` can be used. This script starts with timeseries signals extracted on ABIDE preprocessed data from Preprocessed Connectome Project Initiative (PCP) [8], 866 subjects (autism 402, normal controls 464). This can be downloaded from https://osf.io/hc4md/download
 
 
 - COBRE (http://cobre.mrn.org/)
@@ -23,6 +23,8 @@ like Power.
 - ADNI and ADNIDOD (http://adni.loni.usc.edu/)
 
 - ACPI (http://fcon_1000.projects.nitrc.org/indi/ACPI/html/acpi_mta_1.html)
+
+  - On ACPI datasets: the script ``run_prediction_on_acpi.py`` is used. This script starts with timeseries signals extracted on ACPI preprocessed data. These timeseries are used in the preparation of paper [7] discriminating whether individuals have consumed marijuana or not, of 126 subjects (marijuana consumers 62, non-marijuana consumers 64).
 
 
 - HCP (https://www.humanconnectome.org/study/hcp-young-adult/document/900-subjects-data-release)
