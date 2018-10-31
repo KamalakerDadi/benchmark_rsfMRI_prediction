@@ -24,7 +24,7 @@ like Power.
 
 - ACPI (http://fcon_1000.projects.nitrc.org/indi/ACPI/html/acpi_mta_1.html)
 
-  - On ACPI datasets: the script ``run_prediction_on_acpi.py`` is used. This script starts with timeseries signals extracted on ACPI preprocessed data. These timeseries are used in the preparation of paper [7] discriminating whether individuals have consumed marijuana or not, of 126 subjects (marijuana consumers 62, non-marijuana consumers 64).
+  - On ACPI datasets: the script ``run_prediction_on_acpi.py`` is used. This script starts with timeseries signals extracted on ACPI preprocessed data. These timeseries are used in the preparation of paper [7] discriminating whether individuals have consumed marijuana or not, of 126 subjects (marijuana consumers 62, non-marijuana consumers 64). Timeseries download link https://osf.io/ab4q6/download
 
 
 - HCP (https://www.humanconnectome.org/study/hcp-young-adult/document/900-subjects-data-release)
