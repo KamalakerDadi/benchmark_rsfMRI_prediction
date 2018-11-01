@@ -35,7 +35,9 @@ like Power.
 
 - HCP (https://www.humanconnectome.org/study/hcp-young-adult/document/900-subjects-data-release)
 
-  - The HCP datasets are split into two parts. HCP1 which contains timeseries extracted using AAL, Harvard Oxford, BASC. The script ``run_prediction_on_hcp1.py`` can be used for this part. This script starts with timeseries signals extracted on two groups of IQ individuals. Please see paper [7] on details about splitting procedure. These timeseries are used to classify between low IQ and high IQ, of 443 subjects. Timeseries (HCP1) download link can be found here: https://osf.io/5p7vb/download
+  - The HCP datasets are split into two parts. HCP1 which contains timeseries extracted using AAL, Harvard Oxford, BASC. The script ``run_prediction_on_hcp1.py`` can be used for this part. This script starts with timeseries signals extracted on two groups of IQ individuals. Please see paper [7] on details about making two IQ groups from 900 subjects. These timeseries are used to classify between low IQ and high IQ, of 443 subjects. Timeseries (HCP1) download link can be found here: https://osf.io/5p7vb/download
+  
+  - Another part HCP2, which contains timeseries extracted using Power and MODL atlases. The script ``run_prediction_on_hcp2.py`` can be used for this part. This script starts with timeseries signals extracted on two groups of IQ individuals. Please see paper [7] on details about making two IQ groups from 900 subjects. These timeseries are used to classify between low IQ and high IQ, of 443 subjects. Timeseries (HCP2) download link can be found here: https://osf.io/sxafp/download
 
 
 Preprint available to read:
