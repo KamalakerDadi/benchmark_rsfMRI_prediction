@@ -35,9 +35,9 @@ like Power.
 
 - HCP (https://www.humanconnectome.org/study/hcp-young-adult/document/900-subjects-data-release)
 
-  - The HCP datasets are split into two parts. HCP1 which contains timeseries extracted using AAL, Harvard Oxford, BASC. The script ``run_prediction_on_hcp1.py`` can be used for this part. This script starts with timeseries signals extracted on two groups of IQ individuals. Please see paper [7] on details about making two IQ groups from 900 subjects. These timeseries are used to classify between low IQ and high IQ, of 443 subjects. Timeseries (HCP1) download link can be found here: https://osf.io/5p7vb/download
+  - The HCP datasets are split into two parts. HCP1 which contains timeseries extracted using AAL, Harvard Oxford, BASC. The script ``run_prediction_on_hcp1.py`` can be used for this part. This script starts with timeseries signals extracted on two groups of IQ individuals. Please see paper [7] on details about making two IQ groups from 900 subjects [10]. These timeseries are used to classify between low IQ and high IQ, of 443 subjects. Timeseries (HCP1) download link can be found here: https://osf.io/5p7vb/download
   
-  - Another part HCP2, which contains timeseries extracted using Power and MODL atlases. The script ``run_prediction_on_hcp2.py`` can be used for this part. This script starts with timeseries signals extracted on two groups of IQ individuals. Please see paper [7] on details about making two IQ groups from 900 subjects. These timeseries are used to classify between low IQ and high IQ, of 443 subjects. Timeseries (HCP2) download link can be found here: https://osf.io/sxafp/download
+  - Another part HCP2, which contains timeseries extracted using Power and MODL atlases. The script ``run_prediction_on_hcp2.py`` can be used for this part. This script starts with timeseries signals extracted on two groups of IQ individuals. Please see paper [7] on details about making two IQ groups from 900 subjects [10]. These timeseries are used to classify between low IQ and high IQ, of 443 subjects. Timeseries (HCP2) download link can be found here: https://osf.io/sxafp/download
 
 
 Preprint available to read:
@@ -64,3 +64,5 @@ References
 [8] Craddock, C., Benhajali, Y., Chu, C., Chouinard, F., Evans, A., Jakab, A., Khundrakpam, B.S., Lewis, J.D., Li, Q., Milham, M., Yan, C., Bellec, P., 2013. The neuro bureau preprocessing initiative: open sharing of preprocessed neuroimaging data and derivatives. Frontiers in Neuroinformatics.
 
 [9] Mueller, S.,  Weiner, M., Thal, L., Petersen, R., Jack, C., Jagust, W., Trojanowski, J.Q., Toga, A.W., Beckett, L., 2005. The alzheimers disease neuroimaging initiative. Neuroimaging Clinics of North America 15, 869.
+
+[10] Van Essen, D., Ugurbil, K., Auerbach, E., Barch, D., Behrens, T., Bucholz, R., Chang, A., Chen, L., Corbetta, M., Curtiss, S., Della Penna, S., Feinberg, D., Glasser, M., Harel, N., Heath, A., Larson-Prior, L., Marcus, D., Michalareas, G., Moeller, S., Oostenveld, R., Petersen, S., Prior, F., Schlaggar, B., Smith, S., Snyder, A., Xu, J., Yacoub, E., 2012. The human connectome project: A data acquisition perspective. NeuroImage 62, 2222-2231.
