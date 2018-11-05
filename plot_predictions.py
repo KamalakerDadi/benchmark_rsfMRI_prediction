@@ -159,9 +159,6 @@ def boxplot(df, x=None, y=None, hue=None, axx=None):
     rc('xtick', labelsize=14)
     rc('ytick', labelsize=14)
 
-    n_datasets = len(df['dataset'].unique())
-    palette = color_palette(n_datasets)
-
     sns.boxplot(data=df, x=x, y=y, fliersize=0, linewidth=2,
                 boxprops={'facecolor': 'lightcyan', 'edgecolor': '.0'},
                 width=0.9, ax=axx)
