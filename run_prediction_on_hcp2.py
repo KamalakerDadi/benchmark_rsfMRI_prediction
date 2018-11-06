@@ -23,9 +23,12 @@
    Note: To run this script Nilearn is required to be installed.
 """
 import os
+import warnings
 from os.path import join
 import numpy as np
 import pandas as pd
+
+from downloader import fetch_hcp2
 
 
 def _get_paths(subject_ids, hcp_behavioral, atlas, timeseries_dir):
@@ -42,10 +45,36 @@ def _get_paths(subject_ids, hcp_behavioral, atlas, timeseries_dir):
             groups.append(hcp_behavioral['PMAT24_A_CR'].values[0])
     return timeseries, groups
 
+# Path to data directory where timeseries are downloaded. If not
+# provided this script will automatically download timeseries in the
+# current directory.
 
-# Paths
-timeseries_dir = '/path/to/timeseries/directory/HCP2'
-predictions_dir = '/path/to/save/prediction/results/HCP2'
+timeseries_dir = None
+
+# If provided, then the directory should contain folders of each atlas name
+if timeseries_dir is not None:
+    if not os.path.exists(timeseries_dir):
+        warnings.warn('The timeseries data directory you provided, could '
+                      'not be located. Downloading in current directory.',
+                      stacklevel=2)
+        timeseries_dir = fetch_hcp2(data_dir='./HCP2')
+else:
+    # Checks if there is such folder in current directory. Otherwise,
+    # downloads in current directory
+    timeseries_dir = './HCP2'
+    if not os.path.exists(timeseries_dir):
+        timeseries_dir = fetch_hcp2(data_dir=timeseries_dir)
+
+# Path to data directory where predictions results should be saved.
+predictions_dir = None
+
+if predictions_dir is not None:
+    if not os.path.exists(predictions_dir):
+        os.makedirs(predictions_dir)
+else:
+    predictions_dir = './HCP2/predictions'
+    if not os.path.exists(predictions_dir):
+        os.makedirs(predictions_dir)
 
 atlases = ['Power', 'MODL/64', 'MODL/128']
 
@@ -60,9 +89,55 @@ results = dict()
 for column_name in columns:
     results.setdefault(column_name, [])
 
-# Subject ids of low and high IQ groups
+# Prepare phenotypes
+
+# First, path to phenotypes csv file downloaded from HCP900 release should be
+# used. In particular, this file "xxx.csv" should contain
+# column name "PMAT_24_A_CR" which makes easy to split the IQ individuals to
+# lower IQ and upper IQ groups. Steps/Code to create such groups:
+
+# hcp variable below has a key called phenotype is a pandas data frame
+# contains fluid intelligence score (integers) to each subject. Given this,
+
+# Split data into lower half and upper half
+# quantiles = hcp.phenotype.quantile([0.333, 0.666])
+# low_group = hcp.phenotype < quantiles[0.333]
+# lower_hcp = hcp[low_group]
+# lower_hcp['class_type'] = pd.Series(['lower'] * len(lower_hcp),
+#                                     index=lower_hcp.index)
+
+# upper_group = hcp.phenotype > quantiles[0.666]
+# upper_hcp = hcp[upper_group]
+# upper_hcp['class_type'] = pd.Series(['upper'] * len(upper_hcp),
+#                                     index=upper_hcp.index)
+# new_hcp = pd.concat([lower_hcp, upper_hcp])
+# new_hcp = new_hcp.reset_index()
+
+# Result will be a new dataframe "new_hcp" which has column called 'class_type'
+# having name appended as 'lower' or 'upper' for binary classification.
+
+# Based on this a csv_file should be prepared contains one column "Subject"
+# to know the subject id and column
+# "class_type" specifying whether this "Subject" belongs to lower or upper
+# group. For simplification, we provided subject ids in csv file located in
+# this current directory named as "HCP_subject_ids.csv". If 'lower' or 'upper'
+# can be added based on the code above, it will be easy to run this script.
+
+csv_file = None
+
+if csv_file is None:
+        raise ValueError("Path to a csv file is not provided. It should be "
+                         "provided to run this script to classify "
+                         "individuals whether belongs to low intelligence group "
+                         "or high intelligence group. If given, the csv file "
+                         "should contain columns 'Subject' for identifying "
+                         "subject id. Subject ids are made public provided with"
+                         " name 'HCP_subject_ids.csv' in current directory. "
+                         "Another expected column is 'class_type' for "
+                         "classification denoted by lower or upper.")
+# Subject ids who belongs to low and high IQ groups
 subject_ids = pd.read_csv('HCP_subject_ids.csv')
-hcp_behavioral = pd.read_csv('/path/to/phenotypes/HCP2/')
+hcp_behavioral = pd.read_csv(csv_file)
 
 # Connectomes per measure
 from connectome_matrices import ConnectivityMeasure
@@ -85,6 +160,7 @@ for atlas in atlases:
     iter_for_prediction = cv.split(timeseries, classes)
 
     for index, (train_index, test_index) in enumerate(iter_for_prediction):
+        print("[Cross-validation] Running fold: {0}".format(index))
         for measure in measures:
             print("[Connectivity measure] kind='{0}'".format(measure))
             connections = ConnectivityMeasure(
@@ -107,7 +183,10 @@ for atlas in atlases:
                 results['scores'].append(score)
                 results['covariance_estimator'].append('LedoitWolf')
     res = pd.DataFrame(results)
-    # scores per atlas
-    res.to_csv(join(predictions_dir, atlas, 'scores_{0}.csv'.format(atlas)))
+    # save classification scores per atlas
+    this_atlas_dir = join(predictions_dir, atlas)
+    if not os.path.exists(this_atlas_dir):
+        os.makedirs(this_atlas_dir)
+    res.to_csv(join(this_atlas_dir, 'scores_{0}.csv'.format(atlas)))
 all_results = pd.DataFrame(results)
 all_results.to_csv('predictions_on_hcp2.csv')
