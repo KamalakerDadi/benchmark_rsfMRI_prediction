@@ -30,10 +30,13 @@
 
    Note: To run this script Nilearn is required to be installed.
 """
+import warnings
 import os
 from os.path import join
 import numpy as np
 import pandas as pd
+
+from downloader import fetch_abide
 
 
 def _get_paths(phenotypic, atlas, timeseries_dir):
@@ -54,9 +57,32 @@ def _get_paths(phenotypic, atlas, timeseries_dir):
     return timeseries, diagnosis, IDs_subject
 
 
-# Paths
-timeseries_dir = '/path/to/timeseries/directory/ABIDE'
-predictions_dir = '/path/to/save/prediction/results/ABIDE'
+# Path to data directory where timeseries are downloaded. If not
+# provided this script will automatically download timeseries in the
+# current directory.
+
+timeseries_dir = None
+
+# If provided, then the directory should contain folders of each atlas name
+if timeseries_dir is not None:
+    if not os.path.exists(timeseries_dir):
+        warnings.warn('The timeseries data directory you provided, could '
+                      'not be located. Downloading in current directory.',
+                      stacklevel=2)
+        timeseries_dir = fetch_abide(data_dir='./ABIDE')
+else:
+    timeseries_dir = fetch_abide(data_dir='./ABIDE')
+
+# Path to data directory where predictions results should be saved.
+predictions_dir = None
+
+if predictions_dir is not None:
+    if not os.path.exists(predictions_dir):
+        os.makedirs(predictions_dir)
+else:
+    predictions_dir = './ABIDE/predictions'
+    if not os.path.exists(predictions_dir):
+        os.makedirs(predictions_dir)
 
 atlases = ['AAL', 'HarvardOxford', 'BASC/networks', 'BASC/regions',
            'Power', 'MODL/64', 'MODL/128']
@@ -76,7 +102,7 @@ results = dict()
 for column_name in columns:
     results.setdefault(column_name, [])
 
-pheno_dir = '/path/to/phenotype/ABIDE/Phenotypic_V1_0b_preprocessed1.csv'
+pheno_dir = 'Phenotypic_V1_0b_preprocessed1.csv'
 phenotypic = pd.read_csv(pheno_dir)
 
 # Connectomes per measure
