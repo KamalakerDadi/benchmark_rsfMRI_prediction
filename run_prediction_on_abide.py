@@ -71,7 +71,11 @@ if timeseries_dir is not None:
                       stacklevel=2)
         timeseries_dir = fetch_abide(data_dir='./ABIDE')
 else:
-    timeseries_dir = fetch_abide(data_dir='./ABIDE')
+    # Checks if there is such folder in current directory. Otherwise,
+    # downloads in current directory
+    timeseries_dir = './ABIDE'
+    if not os.path.exists(timeseries_dir):
+        timeseries_dir = fetch_abide(data_dir='./ABIDE')
 
 # Path to data directory where predictions results should be saved.
 predictions_dir = None

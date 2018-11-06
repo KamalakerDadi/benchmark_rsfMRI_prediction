@@ -32,9 +32,12 @@
     Note: To run this script Nilearn is required to be installed.
 """
 import os
+import warnings
 from os.path import join
 import numpy as np
 import pandas as pd
+
+from downloader import fetch_acpi
 
 
 def _get_paths(phenotypes, atlas, timeseries_dir):
@@ -57,9 +60,37 @@ def _get_paths(phenotypes, atlas, timeseries_dir):
     return timeseries, mj_users, sjtyps, subject_ids
 
 
-# Paths
-timeseries_dir = '/path/to/timeseries/directory/ACPI'
-predictions_dir = '/path/to/save/prediction/results/ACPI'
+# Path to data directory where timeseries are downloaded. If not
+# provided this script will automatically download timeseries in the
+# current directory.
+
+timeseries_dir = None
+
+# If provided, then the directory should contain folders of each atlas name
+if timeseries_dir is not None:
+    if not os.path.exists(timeseries_dir):
+        warnings.warn('The timeseries data directory you provided, could '
+                      'not be located. Downloading in current directory.',
+                      stacklevel=2)
+        timeseries_dir = fetch_acpi(data_dir='./ACPI')
+else:
+    # Checks if there is such folder downloaded already in current
+    # directory. Otherwise, downloads in current directory
+    timeseries_dir = './ACPI'
+    if not os.path.exists(timeseries_dir):
+        timeseries_dir = fetch_acpi(data_dir='./ACPI')
+
+# Path to data directory where predictions results should be
+# saved.
+predictions_dir = None
+
+if predictions_dir is not None:
+    if not os.path.exists(predictions_dir):
+        os.makedirs(predictions_dir)
+    else:
+        predictions_dir = './ACPI/predictions'
+        if not os.path.exists(predictions_dir):
+            os.makedirs(predictions_dir)
 
 atlases = ['AAL', 'HarvardOxford', 'BASC/networks', 'BASC/regions',
            'Power', 'MODL/64', 'MODL/128']
@@ -80,7 +111,7 @@ for column_name in columns:
     results.setdefault(column_name, [])
 
 # phenotypes
-pheno_dir = '/path/to/phenotype/ACPI/mta_1_phenotypic_data.csv'
+pheno_dir = 'mta_1_phenotypic_data.csv'
 phenotypes = pd.read_csv(pheno_dir)
 
 # Connectomes per measure
@@ -104,6 +135,7 @@ for atlas in atlases:
     iter_for_prediction = cv.split(timeseries, classes)
 
     for index, (train_index, test_index) in enumerate(iter_for_prediction):
+        print("[Cross-validation] Running fold: {0}".format(index))
         for measure in measures:
             print("[Connectivity measure] kind='{0}'".format(measure))
             connections = ConnectivityMeasure(

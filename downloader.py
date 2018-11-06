@@ -34,3 +34,33 @@ def fetch_abide(data_dir=None):
     _uncompress_file(dl_file, verbose=2)
 
     return data_dir
+
+
+def fetch_acpi(data_dir=None):
+    """Fetch ACPI timeseries data from Open Science Framework (OSF)
+
+    Parameters
+    ----------
+    data_dir : string
+        Path where data should be downloaded
+
+    Returns
+    -------
+    data_dir : string
+        Path to the downloaded timeseries directory
+    """
+    if data_dir is None:
+        warnings.warn('Data downloading is requested but data_dir is not '
+                      'provided. Downloading to the current directory with '
+                      'folder name ACPI', stacklevel=2)
+        data_dir = './ACPI'
+
+    url = 'https://osf.io/ab4q6/download'
+
+    # Download the zip file, first
+    dl_file = _fetch_file(url, data_dir=data_dir)
+
+    # Second, uncompress the downloaded zip file
+    _uncompress_file(dl_file, verbose=2)
+
+    return data_dir
