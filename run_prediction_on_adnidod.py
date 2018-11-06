@@ -107,9 +107,9 @@ for column_name in columns:
 
 # phenotypes
 
-# path to phenotypes csv file "description_file.csv" which should contain
-# column name "DX_Group" to recognize the diagnosis labels of Alzheimer's
-# disease and mild cognitive impairment.
+# path to phenotypes csv file "adnidod_demographic.csv" which should contain
+# column name "ID_scan" to recognize the diagnosis labels of post-traumatic
+# stress disorder and healthy controls.
 
 csv_file = None
 
