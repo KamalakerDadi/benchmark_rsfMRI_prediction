@@ -81,7 +81,7 @@ if timeseries_dir is not None:
 else:
     # Checks if there is such folder in current directory. Otherwise,
     # downloads in current directory
-    timeseries_dir = '/media/kamalakar/Maxtor/work/COBRE'
+    timeseries_dir = './COBRE'
     if not os.path.exists(timeseries_dir):
         timeseries_dir = fetch_cobre(data_dir=timeseries_dir)
 
