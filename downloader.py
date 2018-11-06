@@ -124,3 +124,33 @@ def fetch_adni(data_dir=None):
     _uncompress_file(dl_file, verbose=2)
 
     return data_dir
+
+
+def fetch_adnidod(data_dir=None):
+    """Fetch ADNIDOD timeseries data from Open Science Framework (OSF)
+
+    Parameters
+    ----------
+    data_dir : string
+        Path where data should be downloaded
+
+    Returns
+    -------
+    data_dir : string
+        Path to the downloaded timeseries directory
+    """
+    if data_dir is None:
+        warnings.warn('Data downloading is requested but data_dir is not '
+                      'provided. Downloading to the current directory with '
+                      'folder name ADNIDOD', stacklevel=2)
+        data_dir = './ADNIDOD'
+
+    url = 'https://osf.io/5aeny/download'
+
+    # Download the zip file, first
+    dl_file = _fetch_file(url, data_dir=data_dir)
+
+    # Second, uncompress the downloaded zip file
+    _uncompress_file(dl_file, verbose=2)
+
+    return data_dir
