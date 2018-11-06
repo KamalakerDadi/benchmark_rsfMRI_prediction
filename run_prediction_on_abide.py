@@ -125,6 +125,7 @@ for atlas in atlases:
     iter_for_prediction = cv.split(timeseries, classes)
 
     for index, (train_index, test_index) in enumerate(iter_for_prediction):
+        print("[Cross-validation] Running fold: {0}".format(index))
         for measure in measures:
             print("[Connectivity measure] kind='{0}'".format(measure))
             connections = ConnectivityMeasure(
