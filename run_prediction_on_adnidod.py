@@ -28,9 +28,12 @@
    Note: To run this script Nilearn is required to be installed.
 """
 import os
+import warnings
 from os.path import join
 import numpy as np
 import pandas as pd
+
+from downloader import fetch_adnidod
 
 
 def _get_paths(phenotypic, atlas, timeseries_dir):
@@ -52,10 +55,37 @@ def _get_paths(phenotypic, atlas, timeseries_dir):
             groups.append(this_pheno['ID_subject'].values[0])
     return timeseries, diagnosis, groups, IDs_scan
 
+# Path to data directory where timeseries are downloaded. If not
+# provided this script will automatically download timeseries in the
+# current directory.
 
-# Paths
-timeseries_dir = '/path/to/timeseries/directory/ADNIDOD'
-predictions_dir = '/path/to/save/prediction/results/ADNIDOD'
+timeseries_dir = None
+
+# If provided, then the directory should contain folders of each atlas name
+if timeseries_dir is not None:
+    if not os.path.exists(timeseries_dir):
+        warnings.warn('The timeseries data directory you provided, could '
+                      'not be located. Downloading in current directory.',
+                      stacklevel=2)
+        timeseries_dir = fetch_adnidod(data_dir='./ADNIDOD')
+else:
+    # Checks if there is such folder in current directory. Otherwise,
+    # downloads in current directory
+    timeseries_dir = './ADNIDOD'
+    if not os.path.exists(timeseries_dir):
+        timeseries_dir = fetch_adnidod(data_dir=timeseries_dir)
+
+# Path to data directory where predictions results should be saved.
+
+predictions_dir = None
+
+if predictions_dir is not None:
+    if not os.path.exists(predictions_dir):
+        os.makedirs(predictions_dir)
+else:
+    predictions_dir = './ADNIDOD/predictions'
+    if not os.path.exists(predictions_dir):
+        os.makedirs(predictions_dir)
 
 atlases = ['AAL', 'HarvardOxford', 'BASC/networks', 'BASC/regions',
            'Power', 'MODL/64', 'MODL/128']
@@ -76,8 +106,23 @@ for column_name in columns:
     results.setdefault(column_name, [])
 
 # phenotypes
-pheno_dir = '/path/to/csvfile/ADNIDOD/adnidod_demographic.csv'
-phenotypic = pd.read_csv(pheno_dir)
+
+# path to phenotypes csv file "description_file.csv" which should contain
+# column name "DX_Group" to recognize the diagnosis labels of Alzheimer's
+# disease and mild cognitive impairment.
+
+csv_file = None
+
+if csv_file is None:
+    raise ValueError("Path to a csv file is not provided. It should be "
+                     "provided to run this script to classify "
+                     "individuals between post-traumatic stress disorder "
+                     "versus healthy controls. If given, the csv file should "
+                     "contain columns 'ID_scan' for identification, to "
+                     "pick timeseries and 'diagnosis' assigned to each scan "
+                     "id for classification.")
+
+phenotypic = pd.read_csv(csv_file)
 
 # Connectomes per measure
 from connectome_matrices import ConnectivityMeasure
@@ -100,6 +145,7 @@ for atlas in atlases:
     iter_for_prediction = cv.split(timeseries, classes)
 
     for index, (train_index, test_index) in enumerate(iter_for_prediction):
+        print("[Cross-validation] Running fold: {0}".format(index))
         for measure in measures:
             print("[Connectivity measure] kind='{0}'".format(measure))
             connections = ConnectivityMeasure(
@@ -122,7 +168,10 @@ for atlas in atlases:
                 results['scores'].append(score)
                 results['covariance_estimator'].append('LedoitWolf')
     res = pd.DataFrame(results)
-    # scores per atlas
-    res.to_csv(join(predictions_dir, atlas, 'scores_{0}.csv'.format(atlas)))
+    # save classification scores per atlas
+    this_atlas_dir = join(predictions_dir, atlas)
+    if not os.path.exists(this_atlas_dir):
+        os.makedirs(this_atlas_dir)
+    res.to_csv(join(this_atlas_dir, 'scores_{0}.csv'.format(atlas)))
 all_results = pd.DataFrame(results)
 all_results.to_csv('predictions_on_adnidod.csv')
