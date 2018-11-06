@@ -31,9 +31,12 @@
    Note: To run this script Nilearn is required to be installed.
 """
 import os
+import warnings
 from os.path import join
 import numpy as np
 import pandas as pd
+
+from downloader import fetch_cobre
 
 
 def _get_paths(scores, atlas, timeseries_dir):
@@ -52,17 +55,46 @@ def _get_paths(scores, atlas, timeseries_dir):
 
 
 def get_scores(csv_file):
-    csv_file = '1139_Cobre_Neuropsych_V2_20160607.csv'
+    directory, filename = os.path.split(csv_file)
+    if not filename:
+        raise ValueError("You have provided a path which does not contain "
+                         "csv filename.")
     df = pd.read_csv(csv_file)
     labels = ['Subject_id', 'Dx_group', 'Visit']
     for i, l in enumerate(labels):
         df = df.rename(columns={'Unnamed: %d' % i: l})
     return df
 
+# Path to data directory where timeseries are downloaded. If not
+# provided this script will automatically download timeseries in the
+# current directory.
 
-# Paths
-timeseries_dir = '/path/to/timeseries/directory/COBRE'
-predictions_dir = '/path/to/save/prediction/results/COBRE'
+timeseries_dir = None
+
+# If provided, then the directory should contain folders of each atlas name
+if timeseries_dir is not None:
+    if not os.path.exists(timeseries_dir):
+        warnings.warn('The timeseries data directory you provided, could '
+                      'not be located. Downloading in current directory.',
+                      stacklevel=2)
+        timeseries_dir = fetch_cobre(data_dir='./COBRE')
+else:
+    # Checks if there is such folder in current directory. Otherwise,
+    # downloads in current directory
+    timeseries_dir = '/media/kamalakar/Maxtor/work/COBRE'
+    if not os.path.exists(timeseries_dir):
+        timeseries_dir = fetch_cobre(data_dir=timeseries_dir)
+
+# Path to data directory where predictions results should be saved.
+predictions_dir = None
+
+if predictions_dir is not None:
+    if not os.path.exists(predictions_dir):
+        os.makedirs(predictions_dir)
+else:
+    predictions_dir = './COBRE/predictions'
+    if not os.path.exists(predictions_dir):
+        os.makedirs(predictions_dir)
 
 atlases = ['AAL', 'HarvardOxford', 'BASC/networks', 'BASC/regions',
            'Power', 'MODL/64', 'MODL/128']
@@ -82,9 +114,19 @@ results = dict()
 for column_name in columns:
     results.setdefault(column_name, [])
 
-# phenotypes ('Bipolar' and 'Schizoaffective' should be excluded)
-pheno_dir = '/path/to/csvfile/COBRE/1139_Cobre_Neuropsych_V2_20160607.csv'
-scores = get_scores(csv_file=pheno_dir)
+# path to phenotypes csv file (1139_Cobre_Neuropsych_V2_20160607.csv)
+pheno_dir = None
+if pheno_dir is None:
+    raise ValueError("Path to a csv file '1139_Cobre_Neuropsych_V2_20160607.csv'"
+                     " should be provided to run this script to classify "
+                     "individuals between healthy versus schizophrenia.")
+else:
+    if os.path.exists(pheno_dir):
+        scores = get_scores(csv_file=pheno_dir)
+    else:
+        raise ValueError("Given path to csv file "
+                         "'1139_Cobre_Neuropsych_V2_20160607.csv' does not "
+                         "exist or is not valid.")
 
 # Connectomes per measure
 from connectome_matrices import ConnectivityMeasure
@@ -106,6 +148,7 @@ for atlas in atlases:
     iter_for_prediction = cv.split(timeseries, classes)
 
     for index, (train_index, test_index) in enumerate(iter_for_prediction):
+        print("[Cross-validation] Running fold: {0}".format(index))
         for measure in measures:
             print("[Connectivity measure] kind='{0}'".format(measure))
             connections = ConnectivityMeasure(
@@ -128,7 +171,10 @@ for atlas in atlases:
                 results['scores'].append(score)
                 results['covariance_estimator'].append('LedoitWolf')
     res = pd.DataFrame(results)
-    # scores per atlas
-    res.to_csv(join(predictions_dir, atlas, 'scores_{0}.csv'.format(atlas)))
+    # save classification scores per atlas
+    this_atlas_dir = join(predictions_dir, atlas)
+    if not os.path.exists(this_atlas_dir):
+        os.makedirs(this_atlas_dir)
+    res.to_csv(join(this_atlas_dir, 'scores_{0}.csv'.format(atlas)))
 all_results = pd.DataFrame(results)
 all_results.to_csv('predictions_on_cobre.csv')
