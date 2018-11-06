@@ -75,7 +75,7 @@ if predictions_dir is not None:
     if not os.path.exists(predictions_dir):
         os.makedirs(predictions_dir)
 else:
-    predictions_dir = './ADNI/predictions'
+    predictions_dir = './HCP1/predictions'
     if not os.path.exists(predictions_dir):
         os.makedirs(predictions_dir)
 
