@@ -1,48 +1,109 @@
 Benchmarking models for rsfMRI
 ==============================
 
-This repository contains necessary scripts required for predictions on multiple datasets: COBRE, ADNI, ADNIDOD, ACPI, ABIDE, HCP.
-Each dataset has its own script starting with timeseries signals in csvs. For convenient, we uploaded only the timeseries signals on Open Science Framework but not phenotypic or behavioral information. Please review data usage agreements on datasets websites for access to phenotypic information. These timeseries are used in the preparation of paper [7].
+This repository hosts scripts necessary for running predictions on multiple datasets: COBRE, ADNI, ADNIDOD, ACPI, ABIDE, HCP. The idea is to reproduce "Figure 7: Pipelining choices with precomputed regions, across six datasets" from paper [7] which can be seen in the preprint.
 
-These timeseries signals are extracted using pre-defined anatomical atlases such as AAL [1], Harvard Oxford [2] and
-pre-computed functional atlases such as Power [3], BASC [4] and MODL (massive online dictionary learning) [5].
+Link to the preprint: https://hal.inria.fr/hal-01824205
 
-The sotware used for timeseries extraction, a Python library Nilearn
-(http://nilearn.github.io/) [6]. This software can handle timeseries
-extraction on hard parcellations type atlases typically AAL, Harvard Oxford, BASC
-and soft parcellations type atlases like MODL atlases, seeds based atlases
-like Power.
+Data we provide
+---------------
 
-- ABIDE (http://preprocessed-connectomes-project.org/abide/download.html)
+Timeseries signals
+~~~~~~~~~~~~~~~~~~~
 
-  - On ABIDE datasets: the script ``run_prediction_on_abide.py`` can be used. This script starts with timeseries signals extracted on ABIDE preprocessed data from Preprocessed Connectome Project Initiative (PCP) [8], 866 subjects (autism 402, normal controls 464). This can be downloaded from https://osf.io/hc4md/download
+Prior work: we extracted the timeseries signals on each of 6 datasets using the **same pre-defined/pre-computed atlases** as shown on Figure 7 in [7]. The atlases we used for extraction are : AAL (Automated anatomical labeling) [1], Harvard Oxford [2] and pre-computed functional atlases such as Power [3], BASC (bootstrap analysis of stable clusters) [4] and MODL (massive online dictionary learning) [5].
 
+We provide the timeseries by uploading them on Open Science Framework (OSF). Please see section Scripts to know how to download or run script which downloads automatically.
 
-- COBRE (http://cobre.mrn.org/)
+For HCP, timeseries data are uploaded into two parts. Due to the limited size of data storage on OSF.
+ - Part 1: named as HCP1 which contains timeseries extracted using AAL, Harvard Oxford, BASC. 
+ - Part 2: named as HCP2, which contains timeseries extracted using Power and MODL atlases.
+ 
+Phenotypes (partly for some datasets but not all)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-  - On COBRE datasets: the script ``run_prediction_on_cobre.py`` is used. This script starts with timeseries signals extracted on COBRE subjects 142 subjects (schizophrenia 65, healthy controls 77). COBRE timeseries can be downloaded from this link   https://osf.io/gyrnx/download
+In this repository, we also uploaded the phenotypic information in csv files for ABIDE and ACPI as they are accessible for downloading.
 
-- ADNI and ADNIDOD (http://adni.loni.usc.edu/)
+- ABIDE, a csv file called as "Phenotypic_V1_0b_preprocessed1.csv" is downloaded manually from https://s3.amazonaws.com/fcp-indi/data/Projects/ABIDE_Initiative/Phenotypic_V1_0b_preprocessed1.csv and uploaded here.
 
-  - On ADNI datasets: the script ``run_prediction_on_adni.py`` is used. This script starts with timeseries signals extracted on ADNI 136 subjects [9] of (alzheimer's disease 40, mild cognitive impairment 96). Download link: https://osf.io/xhrcs/download
+- ACPI, a csv file called "mta_1_phenotypic_data.csv" is downloaded manually from https://s3.amazonaws.com/fcp-indi/data/Projects/ACPI/PhenotypicData/mta_1_phenotypic_data.csv  and uploaded here.
+
+**Please read data usage agreements on datasets websites for access/usage to phenotypic information.**
+
+- For the rest of the datasets, phenotypic information needs to be accessed separately on your own consulting their websites. The website links are provided below.
+
+What software we used
+----------------------
+The sotware used for timeseries extraction, a Python library Nilearn (http://nilearn.github.io/) [6]. This software can handle timeseries extraction on hard parcellations type atlases typically AAL, Harvard Oxford, BASC and soft parcellations type atlases like MODL atlases, seeds based atlases like Power.
+
+Scripts we provide: What does each script (``run_*``) do when you launch them ?
+-------------------------------------------------------------------------------
+
+Each script provided, whose name written as ``run_*.py`` (per dataset) starts by:
+
+1. Downloads timeseries of that particular dataset and saves in **current directory**. The folder name saved in current directory depends on the dataset which you want to run.
+
+2. If timeseries are **downloaded already** in current directory, then each script will load the timeseries directly.
+
+3. After the timeseries data is prepared, each script will load (using pandas) the provided phenotypic information in csv file. This applies in particular to datasets like COBRE, HCP, ADNI, ADNIDOD. If the path to csv file is not provided, then each script will **raise a meaningful error message** of what is missing and what needs to be provided to run script.
+
+4. Scripts named as ``run_prediction_on_abide.py`` and ``run_prediction_on_acpi.py`` are **directly launchable** as phenotypic information is made available for these particular datasets.
+
+Data description and classification task in brief
+--------------------------------------------------
+
+- **ABIDE** [8] - the script ``run_prediction_on_abide.py`` can be used for launching predictions on 866 subjects classifying individuals between autism 402 and healthy subjects 464.
+
+  - Website: http://preprocessed-connectomes-project.org/abide/download.html
   
-  - On ADNIDOD datasets: the script ``run_prediction_on_adnidod.py`` is used. This script starts with timeseries signals extracted on ADNIDOD 167 subjects [9] of (ptsd post traumatic stress disorder 89, normal controls 78). Download link: https://osf.io/5aeny/download
+  - **NOTE**: Please note that you are launching 100 cross-validation folds * 7 different atlases * 3 different connectivity measures * 11 different learners on 866 subjects.
 
-- ACPI (http://fcon_1000.projects.nitrc.org/indi/ACPI/html/acpi_mta_1.html)
+- **ACPI** - the script ``run_prediction_on_acpi.py`` can be used for launching predictions discriminating whether individuals have consumed marijuana or not, of 126 subjects (marijuana consumers 62, non-marijuana consumers 64). 
 
-  - On ACPI datasets: the script ``run_prediction_on_acpi.py`` is used. This script starts with timeseries signals extracted on ACPI preprocessed data. These timeseries are used in the preparation of paper [7] discriminating whether individuals have consumed marijuana or not, of 126 subjects (marijuana consumers 62, non-marijuana consumers 64). Timeseries download link https://osf.io/ab4q6/download
-
-
-- HCP (https://www.humanconnectome.org/study/hcp-young-adult/document/900-subjects-data-release)
-
-  - The HCP datasets are split into two parts. HCP1 which contains timeseries extracted using AAL, Harvard Oxford, BASC. The script ``run_prediction_on_hcp1.py`` can be used for this part. This script starts with timeseries signals extracted on two groups of IQ individuals. Please see paper [7] on details about making two IQ groups from 900 subjects [10]. These timeseries are used to classify between low IQ and high IQ, of 443 subjects. Timeseries (HCP1) download link can be found here: https://osf.io/5p7vb/download
+  - Website: http://fcon_1000.projects.nitrc.org/indi/ACPI/html/acpi_mta_1.html
   
-  - Another part HCP2, which contains timeseries extracted using Power and MODL atlases. The script ``run_prediction_on_hcp2.py`` can be used for this part. This script starts with timeseries signals extracted on two groups of IQ individuals. Please see paper [7] on details about making two IQ groups from 900 subjects [10]. These timeseries are used to classify between low IQ and high IQ, of 443 subjects. Timeseries (HCP2) download link can be found here: https://osf.io/sxafp/download
+- **COBRE** - the script ``run_prediction_on_cobre.py`` is useful for discriminating individuals between schizophrenia 65 and healthy controls 77) comprising of total 142 subjects.
+
+  - Website: http://cobre.mrn.org/
+   
+  - **NOTE**: Please note that phenotypic information is explicitly provided.
+
+- **ADNI** [9] - the script ``run_prediction_on_adni.py`` can be used for predictions on 136 subjects, classifying individuals between alzheimer's disease 40, mild cognitive impairment 96.
+
+  - Website: http://adni.loni.usc.edu/
+   
+  - **NOTE**: Please note that phenotypic information is explicitly provided.
+
+- **ADNIDOD** [9] - the script ``run_prediction_on_adnidod.py`` can be used for predictions on 167 subjects, classifying individuals between post traumatic stress disorder (ptsd) 89, normal controls 78.
+
+  - Website: http://adni.loni.usc.edu/
+   
+  - **NOTE**: Please note that phenotypic information is explicitly provided.
+   
+- **HCP** [10] - We made two scripts to process two parts of timeseries data (HCP1 and HCP2).
+
+  - The script ``run_prediction_on_hcp1.py`` can be used to process HCP1 to classify individuals belonging to two different groups, low IQ group and high IQ group. Please see paper [7] on details about making two IQ groups comprising of 443 subjects from a total of 900 subjects [10]. 
+   
+  -  The script ``run_prediction_on_hcp2.py`` can be used to process another part HCP2 for the same classification procedure as described above between high and low IQ groups.
+   
+  - Website: https://www.humanconnectome.org/study/hcp-young-adult/document/900-subjects-data-release
+   
+  - **NOTE**: Please note that phenotypic information is explicitly provided.
+
+
+Addition information on provided scripts
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+A Python module called ``downloader.py`` is provided as a utilities which is used for  fetchers for each of 6 datasets to download timeseries data from OSF into current directory, if path where the data should be downloaded is not provided.
+
+Please note that: you don't necessarily have to study this module as data downloading is integrated automatically in each script. 
 
 
 Preprint available to read:
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
 Dadi, Kamalaker and Rahim, Mehdi and Abraham, Alexandre and Chyzhyk, Darya and Milham, Michael and Thirion, Bertrand and Varoquaux, Gael. **Benchmarking functional connectome-based predictive models for resting-state fMRI.**  2018 (under review) NeuroImage. https://hal.inria.fr/hal-01824205
+
 
 References
 ^^^^^^^^^^
