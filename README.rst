@@ -94,11 +94,15 @@ Data description and classification task in brief
 
 
 Addition information on provided scripts
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-----------------------------------------
 
-A Python module called ``downloader.py`` is provided as a utilities which is used for  fetchers for each of 6 datasets to download timeseries data from OSF into current directory, if path where the data should be downloaded is not provided.
+Visualization script used for generating Figure 7 in preprint
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Please note that: you don't necessarily have to study this module as data downloading is integrated automatically in each script. 
+- ``plot_predictions.py`` can be launched which generates a Figure 7 plot based on predictions directory which has prediction scores for each dataset.
+
+- ``downloader.py`` is provided as a utilities which is used behind fetching timeseries data from OSF for each of 6 datasets. Each function ``fetch_*`` in this module downloads data from OSF into current directory, if path where the data should be downloaded is not provided.
+  - Please note that: you don't necessarily have to study this module as data downloading is integrated automatically in each script. 
 
 
 Preprint available to read:
