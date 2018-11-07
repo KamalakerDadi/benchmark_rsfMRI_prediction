@@ -11,7 +11,9 @@ Data we provide
 Timeseries signals
 ~~~~~~~~~~~~~~~~~~~
 
-Prior work: we extracted the timeseries signals on each of 6 datasets using the **same pre-defined/pre-computed atlases** as shown on Figure 7 in [7]. The atlases we used for extraction are : AAL (Automated anatomical labeling) [1], Harvard Oxford [2] and pre-computed functional atlases such as Power [3], BASC (bootstrap analysis of stable clusters) [4] and MODL (massive online dictionary learning) [5].
+Prior work: we provide the timeseries signals which are extracted on each of 6 datasets using the **same pre-defined/pre-computed atlases** as shown on Figure 7 in [7]. The atlases we used for extraction are : AAL (Automated anatomical labeling) [1], Harvard Oxford [2] and pre-computed functional atlases such as Power [3], BASC (bootstrap analysis of stable clusters) [4] and MODL (massive online dictionary learning) [5].
+
+Note that these are the timeseries used for preparation of our article [7].
 
 We provide the timeseries by uploading them on Open Science Framework (OSF). Please see section Scripts to know how to download or run script which downloads automatically.
 
