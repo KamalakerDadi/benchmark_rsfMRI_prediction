@@ -87,10 +87,10 @@ predictions_dir = None
 if predictions_dir is not None:
     if not os.path.exists(predictions_dir):
         os.makedirs(predictions_dir)
-    else:
-        predictions_dir = './ACPI/predictions'
-        if not os.path.exists(predictions_dir):
-            os.makedirs(predictions_dir)
+else:
+    predictions_dir = './ACPI/predictions'
+    if not os.path.exists(predictions_dir):
+        os.makedirs(predictions_dir)
 
 atlases = ['AAL', 'HarvardOxford', 'BASC/networks', 'BASC/regions',
            'Power', 'MODL/64', 'MODL/128']
