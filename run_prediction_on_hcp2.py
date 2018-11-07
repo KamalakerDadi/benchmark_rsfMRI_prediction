@@ -187,6 +187,6 @@ for atlas in atlases:
     this_atlas_dir = join(predictions_dir, atlas)
     if not os.path.exists(this_atlas_dir):
         os.makedirs(this_atlas_dir)
-    res.to_csv(join(this_atlas_dir, 'scores_{0}.csv'.format(atlas)))
+    res.to_csv(join(this_atlas_dir, 'scores.csv'))
 all_results = pd.DataFrame(results)
 all_results.to_csv('predictions_on_hcp2.csv')
