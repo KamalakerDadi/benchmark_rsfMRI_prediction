@@ -115,14 +115,18 @@ for column_name in columns:
     results.setdefault(column_name, [])
 
 # path to phenotypes csv file (1139_Cobre_Neuropsych_V2_20160607.csv)
-pheno_dir = None
-if pheno_dir is None:
+csv_file = None
+
+if csv_file is None:
     raise ValueError("Path to a csv file '1139_Cobre_Neuropsych_V2_20160607.csv'"
                      " should be provided to run this script to classify "
-                     "individuals between healthy versus schizophrenia.")
+                     "individuals between healthy versus schizophrenia. If "
+                     "given, the csv file should contain columns with "
+                     "'Subject_id' for subject identification and 'Dx_group' "
+                     "for diagnostic type.")
 else:
-    if os.path.exists(pheno_dir):
-        scores = get_scores(csv_file=pheno_dir)
+    if os.path.exists(csv_file):
+        scores = get_scores(csv_file=csv_file)
     else:
         raise ValueError("Given path to csv file "
                          "'1139_Cobre_Neuropsych_V2_20160607.csv' does not "
