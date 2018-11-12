@@ -42,6 +42,8 @@ What software we used
 
 - We also used Pandas (http://pandas.pydata.org/) in the scripts to read csv files.
 
+- For plotting prediction results: matplotlib (https://matplotlib.org/) and seaborn (http://seaborn.pydata.org/ => 0.7.1)
+
 Scripts we provide: What does each script (``run_*``) do when you launch them ?
 -------------------------------------------------------------------------------
 
