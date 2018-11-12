@@ -36,7 +36,11 @@ In this repository, we also uploaded the phenotypic information in csv files for
 
 What software we used
 ----------------------
-The sotware used for timeseries extraction, a Python library Nilearn (http://nilearn.github.io/) [6]. This software can handle timeseries extraction on hard parcellations type atlases typically AAL, Harvard Oxford, BASC and soft parcellations type atlases like MODL atlases, seeds based atlases like Power.
+- The sotware used for timeseries extraction, a Python library Nilearn (http://nilearn.github.io/) [6]. This software can handle   timeseries extraction on hard parcellations type atlases typically AAL, Harvard Oxford, BASC and soft parcellations type atlases  like MODL atlases, seeds based atlases like Power.
+
+- Installing Nilearn and its dependencies are essential. To install Nilearn and its dependencies (http://nilearn.github.io/introduction.html#installing-nilearn) 
+
+- We also used Pandas (http://pandas.pydata.org/) in the scripts to read csv files.
 
 Scripts we provide: What does each script (``run_*``) do when you launch them ?
 -------------------------------------------------------------------------------
