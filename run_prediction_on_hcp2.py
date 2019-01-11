@@ -42,7 +42,7 @@ def _get_paths(subject_ids, hcp_behavioral, atlas, timeseries_dir):
                                str(subject_id) + '_timeseries.txt')
         if os.path.exists(this_timeseries):
             timeseries.append(np.loadtxt(this_timeseries))
-            groups.append(hcp_behavioral['PMAT24_A_CR'].values[0])
+            groups.append(this_hcp_behavioral['PMAT24_A_CR'].values[0])
     return timeseries, groups
 
 # Path to data directory where timeseries are downloaded. If not
@@ -102,11 +102,13 @@ for column_name in columns:
 # Split data into lower half and upper half
 # quantiles = hcp.phenotype.quantile([0.333, 0.666])
 # low_group = hcp.phenotype < quantiles[0.333]
+# 0.333 =>  15.0 low iq cut-off
 # lower_hcp = hcp[low_group]
 # lower_hcp['class_type'] = pd.Series(['lower'] * len(lower_hcp),
 #                                     index=lower_hcp.index)
 
 # upper_group = hcp.phenotype > quantiles[0.666]
+# 0.666 =>  20.0 high iq cut-off
 # upper_hcp = hcp[upper_group]
 # upper_hcp['class_type'] = pd.Series(['upper'] * len(upper_hcp),
 #                                     index=upper_hcp.index)
@@ -118,7 +120,7 @@ for column_name in columns:
 
 # Based on this a csv_file should be prepared contains one column "Subject"
 # to know the subject id and column
-# "class_type" specifying whether this "Subject" belongs to lower or upper
+# "PMAT24_A_CR" specifying whether this "Subject" belongs to lower or upper
 # group. For simplification, we provided subject ids in csv file located in
 # this current directory named as "HCP_subject_ids.csv". If 'lower' or 'upper'
 # can be added based on the code above, it will be easy to run this script.
@@ -153,10 +155,14 @@ cv = StratifiedShuffleSplit(n_splits=100, test_size=0.25,
 
 for atlas in atlases:
     print("Running predictions: with atlas: {0}".format(atlas))
-    timeseries, groups = _get_paths(subject_ids, hcp_behavioral,
+    timeseries, groups = _get_paths(subject_ids['subject_id'], hcp_behavioral,
                                     atlas, timeseries_dir)
+    timeseries = np.array(timeseries)
+    groups = np.array(groups)
+    high_iq = groups[np.where(groups > 20.0)]
 
-    _, classes = np.unique(groups, return_inverse=True)
+    _, classes = np.unique(np.isin(groups, high_iq),
+                           return_inverse=True)
     iter_for_prediction = cv.split(timeseries, classes)
 
     for index, (train_index, test_index) in enumerate(iter_for_prediction):
